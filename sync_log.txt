@@ -1,0 +1,7 @@
+2025-02-11 12:05:01 - Status: Success - Message: Data sent to GCP
+2025-02-11 12:06:01 - Status: Success - Message: Data sent to GCP
+2025-02-11 12:07:01 - Status: Success - Message: Data sent to GCP
+2025-02-11 12:29:49 - Status: Success - Message: Data sent to GCP
+2025-02-11 12:31:00 - Status: Success - Message: Data sent to GCP
+2025-02-11 12:32:00 - Status: Success - Message: Data sent to GCP
+2025-02-11 12:32:19 - Status: Success - Message: Data sent to GCP
