@@ -4,10 +4,10 @@ import time
 import os
 from dotenv import load_dotenv
 
-# Carrega as variáveis de ambiente do arquivo .env, se nao funcionar apenas colocar a informações diretamente no codigo ou usar o dotenv_path para forçar ele carregar o arquivo 
+# carrega as variáveis de ambiente do arquivo .env, se nao funcionar apenas colocar a informações diretamente no codigo ou usar o dotenv_path para forçar ele carregar o arquivo 
 load_dotenv()
 
-# Configuração do banco de dados
+# configuração do banco de dados
 DB_CONFIG = {
     "dbname": os.getenv("DB_NAME"),
     "user": os.getenv("DB_USER"),
@@ -30,7 +30,7 @@ def create_tables(conn):
     """Cria as tabelas no banco de dados"""
     cursor = conn.cursor()
     
-    # Tabela sensores
+    # tabela sensores
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS sensores (
             id SERIAL PRIMARY KEY,
@@ -42,7 +42,7 @@ def create_tables(conn):
         )
     ''')
     
-    # Tabela leitura_sensores
+    # tabela leitura_sensores
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS leitura_sensores (
             id SERIAL PRIMARY KEY,
@@ -54,7 +54,7 @@ def create_tables(conn):
         )
     ''')
     
-    # Tabela sincronizacao
+    # tabela sincronizacao
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS sincronizacao (
             id SERIAL PRIMARY KEY,
@@ -68,10 +68,10 @@ def create_tables(conn):
     print("Tables created successfully")
 
 def insert_initial_data(conn):
-    """Insere dados iniciais de exemplo que estao no pdf"""
+    """uinsere dados iniciais de exemplo que estao no pdf"""
     cursor = conn.cursor()
     
-    # Verifica se os dados já existem
+    # verifica se os dados já existem
     cursor.execute("SELECT COUNT(*) FROM sensores")
     # method returns a single record or None if no more rows are available. apagar essa marcação antes de enviar
     if cursor.fetchone()[0] == 0:
@@ -120,7 +120,7 @@ def synchronize_with_gcp(conn):
     """Simula a sincronização com o GCP"""
     cursor = conn.cursor()
     
-    # Seleciona leituras não sincronizadas
+    # seleciona leituras não sincronizadas
     cursor.execute('''
         SELECT * FROM leitura_sensores WHERE sincronizado = FALSE
     ''')
@@ -130,24 +130,23 @@ def synchronize_with_gcp(conn):
         print("No data to sync")
         return
 
-    # Simula envio para a nuvem
+    # simula envio para a nuvem
     print(f"Syncing {len(unsynced)} readings to GCP...")
     
-    # Atualiza status de sincronização
+    # atualiza status de sincronização
     cursor.execute('''
         UPDATE leitura_sensores SET sincronizado = TRUE WHERE sincronizado = FALSE
     ''')
     
-    # Registra log de sincronização 
+    # registra log de sincronização 
     log_sync_status(True, "Data sent to GCP")
     
     conn.commit()
-    
     print("Sync completada com sucesso")
     print("aperte ctrl + c para para o codigo no terminal")
 
 if __name__ == "__main__":
-    # Configuração inicial
+    # configuração inicial
     try:
         connection = get_db_connection()
         
@@ -155,12 +154,12 @@ if __name__ == "__main__":
             create_tables(connection)
             insert_initial_data(connection)
             
-            # Loop de verificação a cada minuto
+            # loop de verificação a cada minuto
             try:
                 while True:
                     insert_sensor_reading(connection, 1, 24.5)  
                     synchronize_with_gcp(connection)   
-                    time.sleep(60)  # comando que faz esperar 1 minuto
+                    time.sleep(60) 
                    
             except KeyboardInterrupt:
                 print("processo terminado pelo usuário.")
